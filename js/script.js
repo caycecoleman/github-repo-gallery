@@ -7,8 +7,7 @@ const individualRepo = document.querySelector(".repo-data");
 
 //Fetching info from Github API JSON data//
 const gitUserInfo= async function() {
-    const userInfo = await fetch(
-        `https://api.github.com/users/${username}`);
+    const userInfo = await fetch(`https://api.github.com/users/${username}`);
     const data = await userInfo.json();
     displayUserInfo(data);
 };
@@ -60,7 +59,7 @@ repoListElement.addEventListener("click", function(e){
 });
 
 //fetch specific repo you click on//
-const gitSingleRepo = async function() {
+const gitSingleRepo = async function(repoName) {
     const singleRepo = await fetch(
         `https://api.github.com/repos/${username}/${repoName}`);
     const repoInfo = await singleRepo.json();
@@ -88,4 +87,6 @@ const displayRepoInfo = function(repoInfo, languages) {
     <p>Default Branch: ${repoInfo.default_branch}</p>
     <p>Languages: ${languages.join(", ")}</p>
     <a class="visit" href="${repoInfo.html_url}" target="_blank" rel="noreferrer noopener">View Repo on GitHub!</a>`;
+   
+    individualRepo.append(div);
 };
