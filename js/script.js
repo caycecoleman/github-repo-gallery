@@ -4,6 +4,8 @@ const username = "caycecoleman";
 const repoListElement = document.querySelector(".repo-list");
 const allRepoInfo = document.querySelector(".repos");
 const individualRepo = document.querySelector(".repo-data");
+const backToRepoButton = document.querySelector(".view-repos");
+const filterInput = document.querySelector (".filter-repos");
 
 //Fetching info from Github API JSON data//
 const gitUserInfo= async function() {
@@ -29,7 +31,7 @@ const displayUserInfo= function(data) {
     <p><strong>Number of public repos:</strong> ${data.public_repos}</p>
   </div>`;
   overview.append(div);
-  gitRepoList();
+  gitRepoList(username);
 };
 
 //fetch repos from newest to oldest and no more than 100 at a time//
@@ -45,6 +47,7 @@ const displayRepos = function (repos) {
     for (const repo of repos) {
     const repoItem = document.createElement("li");
     repoItem.classList.add("repo");
+    filterInput.classList.remove("hide");
     repoItem.innerHTML = `<h3>${repo.name}</h3>`;
     repoListElement.append(repoItem);
     }
@@ -80,6 +83,8 @@ displayRepoInfo(repoInfo, languages);
 const displayRepoInfo = function(repoInfo, languages) {
     individualRepo.innerHTML = "";
     individualRepo.classList.remove("hide");
+    allRepoInfo.classList.add("hide");
+    backToRepoButton.classList.remove("hide");
     const div = document.createElement("div");
     div.innerHTML = `
     <h3>Name: ${repoInfo.name}</h3>
@@ -90,3 +95,26 @@ const displayRepoInfo = function(repoInfo, languages) {
    
     individualRepo.append(div);
 };
+
+//Add back button//
+backToRepoButton.addEventListener("click", function() {
+    allRepoInfo.classList.remove("hide");
+    backToRepoButton.classList.add("hide");
+    individualRepo.classList.add("hide");
+});
+
+//Add search box//
+filterInput.addEventListener("input", function(e) {
+    const searchBox = e.target.value;
+    const repos = document.querySelectorAll(".repo");
+    const searchBoxText = searchBox.toLowerCase();
+
+    for (const repo of repos) {
+        const repoLowerCaseText = repo.innerText.toLowerCase();
+        if (repoLowerCaseText.includes(searchBoxText)) {
+            repo.classList.remove("hide");
+        } else {
+            repo.classList.add("hide");
+        }
+    }
+});
